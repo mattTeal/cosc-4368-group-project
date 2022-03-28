@@ -1,12 +1,12 @@
-import pd_world
+import main
 
 def aplop(i, j, i2, j2, x, x2, a, b, c, d, e, f):
   fValidMoves = set()
   mValidMoves = set()
   # Female agent actions
-  if (pd_world.world[i][j] == 1):  # and !female.isHoldingBlock
+  if (main.world[i][j] == 1):  # and !female.isHoldingBlock
     fValidMoves.add('D')
-  elif (pd_world.world[i][j] == 2):  # and female.isHoldingBlock
+  elif (main.world[i][j] == 2):  # and female.isHoldingBlock
     fValidMoves.add('P')
   else: 
     if (i == 0):
@@ -36,9 +36,9 @@ def aplop(i, j, i2, j2, x, x2, a, b, c, d, e, f):
         fValidMoves.add('E')
 
   # Male agent actions
-  if (pd_world.world[i2][j2] == 1):  # and !Male.isHoldingBlock
+  if (main.world[i2][j2] == 1):  # and !Male.isHoldingBlock
     mValidMoves.add('D')
-  elif (pd_world.world[i2][j2] == 2):  # and Male.isHoldingBlock
+  elif (main.world[i2][j2] == 2):  # and Male.isHoldingBlock
     mValidMoves.add('P')
   else: 
     if (i2 == 0):
