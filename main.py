@@ -10,7 +10,7 @@ currentState = [0, 0, 1, 0, 1, 1, 1, 1, 1]
 newState = [0, 0, 0, 0, 0, 1, 1, 1, 1]
 
 # testing a state that doesnt have drop/pickup
-testState = [0, 0, 0, 3, 3, 1, 1, 1, 1]
+testState = [1, 1, 0, 3, 3, 1, 1, 1, 1]
 
 # Define pickup and drop off locations. Converted from given to zero indexed
 # This is so experiment 4 is easier
@@ -32,7 +32,7 @@ testMoves = testWorld.aplop(testState)
 print("Available moves for one agent:", testMoves)
 # Pick a random move from applicable to test
 qVal = testTable.getQVal(testState)
-chosenMove = PGreedy(testMoves, qVal)
+chosenMove = PExploit(testMoves, qVal)
 
 # Perform Qlearning update
 testTable.QUpdate(currentState, newState, chosenMove, newMoves)
