@@ -1,8 +1,4 @@
-import itertools
-from qtable import Qtable
-import numpy as np
 import random
-import itertools
 
 
 def PRandom(validMoves):
@@ -33,8 +29,14 @@ def PExploit(validMoves, qVal):
             if value == maxVal:
                 maxMoves.append(key)
         minMoves = list(set(validMoves) - set(maxMoves))
-        if random.random() < chance:
-            return random.choice(minMoves)
+        ran = random.random()
+        print(ran)
+        print(validMoves)
+        print(len(minMoves))
+        if ran < chance:
+            if len(minMoves) != 0:
+                return random.choice(minMoves)
+            return random.choice(maxMoves)
         else:
             return random.choice(maxMoves)
 

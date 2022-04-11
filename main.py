@@ -1,7 +1,5 @@
 from world import world
 from qtable import Qtable
-import numpy as np
-import random
 from policies import *
 
 # This is the current state and mock new state for a single agent for testing
