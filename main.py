@@ -22,11 +22,12 @@ testTable = Qtable(0.3, 0.5)
 
 # Changed aplop to work universally for both agents
 moves = testWorld.aplop(currentState)
+newMoves = testWorld.aplop(newState)
 print("Available moves for one agent:", moves)
 # Pick a random move from applicable to test
 chosenMove = random.choice(tuple(moves))
 # Perform Qlearning update
-testTable.QUpdate(currentState, newState, chosenMove, moves)
+testTable.QUpdate(currentState, newState, chosenMove, newMoves)
 print("Updated qtable for action ", chosenMove, ":", testTable.getQVal(currentState))
 
 # Starting locations
