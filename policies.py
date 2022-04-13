@@ -10,7 +10,7 @@ def PRandom(validMoves):
     elif drop_off == True:
         return 'D'
     else:
-        return random.choice(validMoves)
+        return random.choice(tuple(validMoves))
 
 
 def PExploit(validMoves, qVal):
@@ -30,15 +30,12 @@ def PExploit(validMoves, qVal):
                 maxMoves.append(key)
         minMoves = list(set(validMoves) - set(maxMoves))
         ran = random.random()
-        print(ran)
-        print(validMoves)
-        print(len(minMoves))
         if ran < chance:
             if len(minMoves) != 0:
-                return random.choice(minMoves)
-            return random.choice(maxMoves)
+                return random.choice(tuple(minMoves))
+            return random.choice(tuple(maxMoves))
         else:
-            return random.choice(maxMoves)
+            return random.choice(tuple(maxMoves))
 
 
 def PGreedy(validMoves, qVal):

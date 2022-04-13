@@ -27,20 +27,20 @@ moves = testWorld.aplop(currentState)
 newMoves = testWorld.aplop(newState)
 
 testMoves = testWorld.aplop(testState)
-print("Available moves for one agent:", testMoves)
+print("Available moves for one agent:", moves)
 # Pick a random move from applicable to test
 qVal = testTable.getQVal(testState)
 chosenMove = PExploit(testMoves, qVal)
 
 # Perform Qlearning update
-testTable.QUpdate(currentState, newState, chosenMove, newMoves)
-print("Updated qtable for action ", chosenMove,
-      ":", testTable.getQVal(currentState))
-
-# Perform SARSA update
-# testTable.SARSA(currentState, newState, chosenMove)
+# testTable.QUpdate(currentState, newState, chosenMove, newMoves)
 # print("Updated qtable for action ", chosenMove,
 #       ":", testTable.getQVal(currentState))
+
+# Perform SARSA update
+testTable.SARSA(currentState, newState, chosenMove)
+print("Updated qtable for action ", chosenMove,
+      ":", testTable.getQVal(currentState))
 
 # Starting locations
 male_agent_location = [4, 2]
