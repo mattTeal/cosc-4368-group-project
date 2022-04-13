@@ -1,5 +1,12 @@
 import random
 
+def chooseMove(moves, qVals, policy):
+    if (policy == "PR"):
+        return PRandom(moves)
+    if (policy == "PE"):
+        return PExploit(moves, qVals)
+    if (policy == "PG"):
+        return PGreedy(moves, qVals)
 
 def PRandom(validMoves):
     pick_up = 'P' in validMoves
@@ -30,9 +37,6 @@ def PExploit(validMoves, qVal):
                 maxMoves.append(key)
         minMoves = list(set(validMoves) - set(maxMoves))
         ran = random.random()
-        print(ran)
-        print(validMoves)
-        print(len(minMoves))
         if ran < chance:
             if len(minMoves) != 0:
                 return random.choice(minMoves)

@@ -23,18 +23,21 @@ class Qtable:
     def __getitem__(self, key):
         return self.stateSpace[key]
 
-    def getQVal(self, state):
-        i, j, x, k, l, s, t, u, v = state
+    def getQVal(self, agent):
+        i, j, x, k, l, s, t, u, v = agent.getState()
         return self.stateSpace[i][j][x][k][l][s][t][u][v].actions
 
-    def QUpdate(self, currentState, newState, action, aplop):
-        i, j, x, k, l, s, t, u, v = currentState
-        i1, j1, x1, k1, l1, s1, t1, u1, v1 = newState
-        self.stateSpace[i][j][x][k][l][s][t][u][v].QUpdate(
-            action, self.stateSpace[i1][j1][x1][k1][l1][s1][t1][u1][v1], self.learning, self.discount, aplop)
+    def QUpdate(self, oldState, agent, action):
+        i, j, x, k, l, s, t, u, v = oldState
+        i1, j1, x1 = agent.agentState
+        s1, t1, u1, v1 = agent.worldState
+        aplop = agent.aplop()
+        return self.stateSpace[i][j][x][k][l][s][t][u][v].QUpdate(
+            action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount, aplop)
 
-    def SARSA(self, currentState, newState, action):
-        i, j, x, k, l, s, t, u, v = currentState
-        i1, j1, x1, k1, l1, s1, t1, u1, v1 = newState
-        self.stateSpace[i][j][x][k][l][s][t][u][v].SARSA(
-            action, self.stateSpace[i1][j1][x1][k1][l1][s1][t1][u1][v1], self.learning, self.discount)
+    def SARSA(self, oldState, agent, action):
+        i, j, x, k, l, s, t, u, v = oldState
+        i1, j1, x1 = agent.agentState
+        s1, t1, u1, v1 = agent.worldState
+        return self.stateSpace[i][j][x][k][l][s][t][u][v].SARSA(
+            action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount)

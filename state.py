@@ -28,8 +28,10 @@ class state:
     def QUpdate(self, action, new_state, learning, discount, aplop):
         self.actions[action] = (1 - learning) * self.actions[action] + learning * (
             self.rewards[action] + discount * new_state.maxApplicable(aplop))
+        return self.actions
 
     def SARSA(self, action, new_state, learning, discount):
         self.actions[action] = self.actions[action] + learning * \
             (self.rewards[action] + discount *
              new_state.actions[action] - self.actions[action])
+        return self.actions
