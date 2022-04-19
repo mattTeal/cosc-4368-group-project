@@ -6,8 +6,8 @@ from policies import *
 
 random.seed(10)
 
-pickups = [(2, 4), (3, 1)]
-dropoffs = [(0, 0), (0, 4), (2, 2), (4, 4)]
+pickups = [(4, 2), (1, 3)]
+dropoffs = [(0, 0), (4, 0), (2, 2), (4, 4)]
 init_blocks = 10
 learningRate = 0.3
 discountRate = 0.5
@@ -24,9 +24,10 @@ terminalStates = 0
 
 for i in range(8000):
     moves = femaleAgent.aplop()
+    if(i == 0):
+        print(moves)
     chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
     qtable = femaleAgent.move(chosenMove)
-
     moves = maleAgent.aplop()
     chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
     qtable = maleAgent.move(chosenMove)

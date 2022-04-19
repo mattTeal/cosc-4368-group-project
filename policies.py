@@ -1,4 +1,6 @@
 import random
+random.seed(10)
+
 
 def chooseMove(moves, qVals, policy):
     if (policy == "PR"):
@@ -7,6 +9,7 @@ def chooseMove(moves, qVals, policy):
         return PExploit(moves, qVals)
     if (policy == "PG"):
         return PGreedy(moves, qVals)
+
 
 def PRandom(validMoves):
     pick_up = 'P' in validMoves
@@ -35,10 +38,14 @@ def PExploit(validMoves, qVal):
         for key, value in d.items():
             if value == maxVal:
                 maxMoves.append(key)
-        minMoves = list(set(validMoves) - set(maxMoves))
+        minMoves = list()
+        for i in validMoves:
+            if i not in maxMoves:
+                minMoves.append(i)
         ran = random.random()
         if ran < chance:
             if len(minMoves) != 0:
+                print(ran)
                 return random.choice(tuple(minMoves))
             return random.choice(tuple(maxMoves))
         else:
@@ -60,4 +67,4 @@ def PGreedy(validMoves, qVal):
         for key, value in d.items():
             if value == maxVal:
                 maxMoves.append(key)
-        return random.choice(maxMoves)
+        return random.choice(tuple(maxMoves))

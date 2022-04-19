@@ -52,33 +52,33 @@ class world:
     # Reworked aplop to be simpler and work without needing to specify agent
     def aplop(self, agent):
         i, j, x, i2, j2, s, t, u, v = agent.getState()
-        validMoves = set()
+        validMoves = []
         validDP = [s, t, u, v]
         # Agent actions
         if ((i, j) in self.dropoffs and x):  # on dropoff and isHoldingBlock
             if (validDP[self.dropoffs.index((i, j))]):
-                validMoves.add('D')
+                validMoves.append('D')
 
         if ((i, j) in self.pickups and not x):  # on pickup and !isHoldingBlock
             if (validDP[self.pickups.index((i, j))]):
-                validMoves.add('P')
-        
+                validMoves.append('P')
+
         pairedAgent = (i2, j2)
         N = (i, j-1)
         E = (i+1, j-1)
         S = (i, j+1)
         W = (i-1, j+1)
         if (i > 0 and W != pairedAgent):
-            validMoves.add('W')
+            validMoves.append('W')
         if (i < 4 and E != pairedAgent):
-            validMoves.add('E')
+            validMoves.append('E')
         if (j > 0 and N != pairedAgent):
-            validMoves.add('N')
+            validMoves.append('N')
         if (j < 4 and S != pairedAgent):
-            validMoves.add('S')
+            validMoves.append('S')
 
         return tuple(validMoves)
-    
+
     def apply(self, agent, action):
         # (i, j) - position of agent
         # x - isHoldingBlock
