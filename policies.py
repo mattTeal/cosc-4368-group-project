@@ -45,7 +45,6 @@ def PExploit(validMoves, qVal):
         ran = random.random()
         if ran < chance:
             if len(minMoves) != 0:
-                print(ran)
                 return random.choice(tuple(minMoves))
             return random.choice(tuple(maxMoves))
         else:

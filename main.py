@@ -24,8 +24,6 @@ terminalStates = 0
 
 for i in range(8000):
     moves = femaleAgent.aplop()
-    if(i == 0):
-        print(moves)
     chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
     qtable = femaleAgent.move(chosenMove)
     moves = maleAgent.aplop()
