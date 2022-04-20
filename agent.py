@@ -7,6 +7,9 @@ class agent:
         self.pairedAgent = None
         self.lrnStrat = learningStrat
 
+    def getPos(self):
+        return self.agentState
+
     def getQVals(self):
         return self.qTable.getQVal(self)
     

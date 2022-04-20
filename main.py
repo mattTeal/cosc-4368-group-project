@@ -29,7 +29,8 @@ for i in range(8000):
     moves = maleAgent.aplop()
     chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
     qtable = maleAgent.move(chosenMove)
-
+    print(qtable)
+    print(maleAgent.getPos())
     if(testWorld.isTerminal()):
         terminalStates += 1
         testWorld.reset(init_blocks)
