@@ -65,9 +65,9 @@ class world:
 
         pairedAgent = (i2, j2)
         N = (i, j-1)
-        E = (i+1, j-1)
+        E = (i+1, j)
         S = (i, j+1)
-        W = (i-1, j+1)
+        W = (i-1, j)
         if (i > 0 and W != pairedAgent):
             validMoves.append('W')
         if (i < 4 and E != pairedAgent):

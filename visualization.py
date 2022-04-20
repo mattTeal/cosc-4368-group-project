@@ -1,3 +1,4 @@
+from email import policy
 import pygame
 import time
 from dummymoves import moves
@@ -11,6 +12,11 @@ from policies import *
 ##Init World##
 random.seed(10)
 
+# QLearn or SARSA
+algo = "QLearn"
+#PR, PE, PG
+policies = "PE"
+
 pickups = [(4, 2), (1, 3)]
 dropoffs = [(0, 0), (4, 0), (2, 2), (4, 4)]
 init_blocks = 10
@@ -19,9 +25,9 @@ discountRate = 0.5
 testWorld = world(pickups, dropoffs, init_blocks)
 
 femaleAgent = agent(2, 0, 0, Qtable(
-    learningRate, discountRate), testWorld, "QLearn")
+    learningRate, discountRate), testWorld, algo)
 maleAgent = agent(2, 4, 0, Qtable(
-    learningRate, discountRate), testWorld, "QLearn")
+    learningRate, discountRate), testWorld, algo)
 
 femaleAgent.pairAgent(maleAgent)
 
@@ -125,27 +131,23 @@ for row in range(5):
                                      WIDTH,
                                      HEIGHT])
         checkLocation(cell_img, row, column)
-        # drawCellValue(cell_img)
-        # drawLastMove(cell_img)
-
         if valueGrid[row][column] == 1:
             color = red
 
 clock.tick(50)
 pygame.display.flip()
+terminalStates = 0
+count = 0
 
 while not done:
     time.sleep(.5)
     for i in range(8000):
-
-        ##Calculate moves##
+        ##Female Agent##
         moves = femaleAgent.aplop()
-        chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PG")
+        chosenMove = chooseMove(moves, maleAgent.getQVals(), policies)
         qtable = femaleAgent.move(chosenMove)
         value = qtable[1]
         move = qtable[2]
-
-        ##Female Agent##
         color = white
         cell_img = pygame.draw.rect(scr,
                                     color,
@@ -156,8 +158,6 @@ while not done:
         checkLocation(cell_img, fAgent[0], fAgent[1])
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
-
-        # print(fAgent)
         fMoves = femaleAgent.getPos()
         fAgent[0] = fMoves[1]
         fAgent[1] = fMoves[0]
@@ -175,7 +175,7 @@ while not done:
 
         ##Male Agent##
         moves = maleAgent.aplop()
-        chosenMove = chooseMove(moves, maleAgent.getQVals(), "PG")
+        chosenMove = chooseMove(moves, femaleAgent.getQVals(), policies)
         qtable = maleAgent.move(chosenMove)
         value = qtable[1]
         move = qtable[2]
@@ -191,7 +191,6 @@ while not done:
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
 
-        print(mAgent)
         mMoves = maleAgent.getPos()
         mAgent[0] = mMoves[1]
         mAgent[1] = mMoves[0]
@@ -207,12 +206,43 @@ while not done:
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
 
+        print(count)
+        count += 1
+        print(femaleAgent.getPos())
+        print(maleAgent.getPos())
+
+        ##Reset for terminal state##
+        if(testWorld.isTerminal()):
+            pause = 1
+            terminalStates += 1
+            testWorld.reset(init_blocks)
+            femaleAgent.reset(2, 0)
+            maleAgent.reset(2, 4)
+            mAgent = [4, 2]
+            fAgent = [0, 2]
+
+            for row in range(5):
+                for column in range(5):
+                    color = white
+
+                    cell_img = pygame.draw.rect(scr,
+                                                color,
+                                                [(MARGIN + WIDTH) * column + MARGIN,
+                                                 (MARGIN + HEIGHT) *
+                                                 row + MARGIN,
+                                                 WIDTH,
+                                                 HEIGHT])
+                    checkLocation(cell_img, row, column)
+                    if valueGrid[row][column] == 1:
+                        color = red
+            time.sleep(5)
         clock.tick(50)
         pygame.display.flip()
 
-        time.sleep(.01)
+        # speed of agent movement
+        time.sleep(0.1)
 
-    time.sleep(.6)
+    time.sleep(10)
     done = True
 
 pygame.quit()
