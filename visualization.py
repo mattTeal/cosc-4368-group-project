@@ -31,7 +31,6 @@ done = False
 clock = pygame.time.Clock()
 counter = 0
 
-
 def drawPickup(img):
     for loc in pickup_locations:
         P_img = pygame.font.SysFont(cell_font,
@@ -42,7 +41,6 @@ def drawPickup(img):
         text_rect.x += 10
         text_rect.y += 18
         scr.blit(P_img, text_rect)
-
 
 def drawDropoff(img):
     for loc in dropoff_locations:
@@ -58,12 +56,21 @@ def drawDropoff(img):
 def drawCellValue(img):
     for loc in dropoff_locations:
         value_img = pygame.font.SysFont(cell_font,
-                                    25).render(
-            str(10), True, black
+                                    40).render(
+            str(1.0127), True, black
         )
         text_rect = value_img.get_rect(center=img.center)
         scr.blit(value_img, text_rect)
-
+    
+def drawLastMove(img):
+    for loc in dropoff_locations:
+        last_move_img = pygame.font.SysFont(cell_font,
+                                    25).render(
+            "N", True, black
+        )
+        text_rect = last_move_img.get_rect(center=img.center)
+        text_rect.y += 30
+        scr.blit(last_move_img, text_rect)
 
 def checkLocation(img, row, column):
     for loc in pickup_locations:
@@ -72,7 +79,6 @@ def checkLocation(img, row, column):
     for loc in dropoff_locations:
         if (row == loc[0] and column == loc[1]):
             drawDropoff(img)
-
 
 for row in range(5):
     for column in range(5):
@@ -86,6 +92,7 @@ for row in range(5):
                                      HEIGHT])
         checkLocation(cell_img, row, column)
         drawCellValue(cell_img)
+        drawLastMove(cell_img)
 
         if valueGrid[row][column] == 1:
             color = red
@@ -106,6 +113,7 @@ while not done:
                                      HEIGHT])
         checkLocation(cell_img, agent[0], agent[1])
         drawCellValue(cell_img)
+        drawLastMove(cell_img)
 
         print(agent)
         agent[0] = agent[0] + move[0]
@@ -120,7 +128,7 @@ while not done:
                                      HEIGHT])
         checkLocation(cell_img, agent[0], agent[1])
         drawCellValue(cell_img)
-
+        drawLastMove(cell_img)
 
         clock.tick(50)
         pygame.display.flip()
