@@ -21,10 +21,8 @@ for row in range(5):
         valueGrid[row].append(0)
 
 agent = [0, 0]
-copy_agent = [0, 6]
 print(agent[0])
 valueGrid[agent[0]][agent[1]] = 1
-valueGrid[copy_agent[0]][copy_agent[1]] = 1
 
 pickup_locations = [[2, 4], [3, 1]]
 dropoff_locations = [[0, 0], [0, 4], [2, 2], [4, 4]]
@@ -33,26 +31,46 @@ done = False
 clock = pygame.time.Clock()
 counter = 0
 
-
 def drawPickup(img):
     for loc in pickup_locations:
         P_img = pygame.font.SysFont(cell_font,
                                     50).render(
-            "P", True, black
+            "*", True, black
         )
-        text_rect = P_img.get_rect(center=img.center)
+        text_rect = P_img.get_rect(center=img.topleft)
+        text_rect.x += 10
+        text_rect.y += 18
         scr.blit(P_img, text_rect)
-
 
 def drawDropoff(img):
     for loc in dropoff_locations:
         D_img = pygame.font.SysFont(cell_font,
-                                    50).render(
+                                    25).render(
             "D", True, black
         )
-        text_rect = D_img.get_rect(center=img.center)
+        text_rect = D_img.get_rect(center=img.topleft)
+        text_rect.x += 10
+        text_rect.y += 10
         scr.blit(D_img, text_rect)
 
+def drawCellValue(img):
+    for loc in dropoff_locations:
+        value_img = pygame.font.SysFont(cell_font,
+                                    40).render(
+            str(1.0127), True, black
+        )
+        text_rect = value_img.get_rect(center=img.center)
+        scr.blit(value_img, text_rect)
+    
+def drawLastMove(img):
+    for loc in dropoff_locations:
+        last_move_img = pygame.font.SysFont(cell_font,
+                                    25).render(
+            "N", True, black
+        )
+        text_rect = last_move_img.get_rect(center=img.center)
+        text_rect.y += 30
+        scr.blit(last_move_img, text_rect)
 
 def checkLocation(img, row, column):
     for loc in pickup_locations:
@@ -62,21 +80,9 @@ def checkLocation(img, row, column):
         if (row == loc[0] and column == loc[1]):
             drawDropoff(img)
 
-
-def checkCopyLocation(img, row, column):
-    for loc in pickup_locations:
-        if (row == loc[0] and column - 6 == loc[1]):
-            drawPickup(img)
-    for loc in dropoff_locations:
-        if (row == loc[0] and column - 6 == loc[1]):
-            drawDropoff(img)
-
-
 for row in range(5):
-    for column in range(11):
+    for column in range(5):
         color = white
-        if(column == 5):
-            color = black
 
         cell_img = pygame.draw.rect(scr,
                                     color,
@@ -85,15 +91,17 @@ for row in range(5):
                                      WIDTH,
                                      HEIGHT])
         checkLocation(cell_img, row, column)
-        checkCopyLocation(cell_img, row, column)
+        drawCellValue(cell_img)
+        drawLastMove(cell_img)
 
         if valueGrid[row][column] == 1:
             color = red
+
 clock.tick(50)
 pygame.display.flip()
 
 while not done:
-    time.sleep(.5)
+    time.sleep(.25)
     for move in moves:
         counter += 1
         color = white
@@ -104,21 +112,12 @@ while not done:
                                      WIDTH,
                                      HEIGHT])
         checkLocation(cell_img, agent[0], agent[1])
-
-        copy_cell_img = pygame.draw.rect(scr,
-                                         color,
-                                         [(MARGIN + WIDTH) * copy_agent[1] + MARGIN,
-                                          (MARGIN + HEIGHT) *
-                                          copy_agent[0] + MARGIN,
-                                          WIDTH,
-                                          HEIGHT])
-        checkCopyLocation(copy_cell_img, copy_agent[0], copy_agent[1])
+        drawCellValue(cell_img)
+        drawLastMove(cell_img)
 
         print(agent)
         agent[0] = agent[0] + move[0]
         agent[1] = agent[1] + move[1]
-        copy_agent[0] = agent[0]
-        copy_agent[1] = agent[1] + 6
 
         color = red
         cell_img = pygame.draw.rect(scr,
@@ -128,15 +127,8 @@ while not done:
                                      WIDTH,
                                      HEIGHT])
         checkLocation(cell_img, agent[0], agent[1])
-
-        copy_cell_img = pygame.draw.rect(scr,
-                                         color,
-                                         [(MARGIN + WIDTH) * copy_agent[1] + MARGIN,
-                                          (MARGIN + HEIGHT) *
-                                          copy_agent[0] + MARGIN,
-                                          WIDTH,
-                                          HEIGHT])
-        checkCopyLocation(copy_cell_img, copy_agent[0], copy_agent[1])
+        drawCellValue(cell_img)
+        drawLastMove(cell_img)
 
         clock.tick(50)
         pygame.display.flip()
