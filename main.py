@@ -24,12 +24,12 @@ terminalStates = 0
 
 for i in range(8000):
     moves = femaleAgent.aplop()
-    chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
+    chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PG")
     qtable = femaleAgent.move(chosenMove)
     moves = maleAgent.aplop()
-    chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
+    chosenMove = chooseMove(moves, maleAgent.getQVals(), "PG")
     qtable = maleAgent.move(chosenMove)
-    print(qtable)
+    # print(qtable)
     print(maleAgent.getPos())
     if(testWorld.isTerminal()):
         terminalStates += 1
