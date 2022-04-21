@@ -298,6 +298,7 @@ while not done:
         # speed of agent movement
         time.sleep(0.03)
 
+    print("Terminal states reached: ", terminalStates)
     time.sleep(10)
     done = True
 
