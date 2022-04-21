@@ -140,7 +140,7 @@ def shadeCell(value):
         if(value < 1):
             value = (abs(1 - value)) * 250
         else:
-            value = 255
+            value = 0
         return (value, 255, value)
 
 for row in range(5):
