@@ -38,11 +38,14 @@ femaleAgent.pairAgent(maleAgent)
 terminalStates = 0
 
 ##Init Game##
-pygame.init()
+pygame.init()  
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
+redtone = red
+greentone = (0, 255, 0)
 blue = (0, 0, 255)
+yellow = (255, 255, 0)
 green = (0, 128, 0)
 WIDTH = 100
 HEIGHT = 100
@@ -69,7 +72,6 @@ dropoff_locations = [[0, 0], [0, 4], [2, 2], [4, 4]]
 done = False
 clock = pygame.time.Clock()
 
-
 def drawPickup(img, blocks):
     D_img = pygame.font.SysFont(cell_font,
                                 25).render(
@@ -85,7 +87,6 @@ def drawPickup(img, blocks):
         text_rect.x += 10 + i * 8
         text_rect.y += 35
         scr.blit(P_img, text_rect)
-
 
 def drawDropoff(img, blocks):
 
@@ -104,7 +105,6 @@ def drawDropoff(img, blocks):
         item_rect.y += 35
         scr.blit(item, item_rect)
 
-
 def drawCellValue(img, value):
     value_img = pygame.font.SysFont(cell_font,
                                     40).render(
@@ -112,7 +112,6 @@ def drawCellValue(img, value):
     )
     text_rect = value_img.get_rect(center=img.center)
     scr.blit(value_img, text_rect)
-
 
 def drawLastMove(img, move):
     last_move_img = pygame.font.SysFont(cell_font,
@@ -123,7 +122,6 @@ def drawLastMove(img, move):
     text_rect.y += 30
     scr.blit(last_move_img, text_rect)
 
-
 def checkLocation(img, row, column, blocks):
     for loc in pickup_locations:
         if (row == loc[0] and column == loc[1]):
@@ -132,6 +130,18 @@ def checkLocation(img, row, column, blocks):
         if (row == loc[0] and column == loc[1]):
             drawDropoff(img, blocks)
 
+def shadeCell(value):
+    if (value < 0):
+        value = (1 - abs(value)) * 250
+        if (value > 255):
+            value = 255
+        return (255, value, value)
+    else:
+        if(value < 1):
+            value = (abs(1 - value)) * 250
+        else:
+            value = 255
+        return (value, 255, value)
 
 for row in range(5):
     for column in range(5):
@@ -145,6 +155,7 @@ for row in range(5):
                                      HEIGHT])
         blocks = items[row][column]
         checkLocation(cell_img, row, column, blocks)
+        drawCellValue(cell_img, 0)
         if valueGrid[row][column] == 1:
             color = red
 
@@ -160,10 +171,10 @@ while not done:
         chosenMove = chooseMove(moves, femaleAgent.getQVals(), policies)
         qtable = femaleAgent.move(chosenMove)
         value = qtable[1]
+        cell_shade = shadeCell(value)
         move = qtable[2]
-        color = white
         cell_img = pygame.draw.rect(scr,
-                                    color,
+                                    cell_shade,
                                     [(MARGIN + WIDTH) * fAgent[1] + MARGIN,
                                      (MARGIN + HEIGHT) * fAgent[0] + MARGIN,
                                      WIDTH,
@@ -191,7 +202,7 @@ while not done:
 
         color = red
         cell_img = pygame.draw.rect(scr,
-                                    color,
+                                    yellow,
                                     [(MARGIN + WIDTH) * fAgent[1] + MARGIN,
                                      (MARGIN + HEIGHT) * fAgent[0] + MARGIN,
                                      WIDTH,
@@ -207,10 +218,10 @@ while not done:
         chosenMove = chooseMove(moves, maleAgent.getQVals(), policies)
         qtable = maleAgent.move(chosenMove)
         value = qtable[1]
+        cell_shade = shadeCell(value)
         move = qtable[2]
 
-        color = white
-        cell_img = pygame.draw.rect(scr, color,
+        cell_img = pygame.draw.rect(scr, cell_shade,
                                     [(MARGIN + WIDTH) * mAgent[1] + MARGIN,
                                      (MARGIN + HEIGHT) * mAgent[0] + MARGIN,
                                      WIDTH,
@@ -284,7 +295,7 @@ while not done:
         pygame.display.flip()
 
         # speed of agent movement
-        time.sleep(0.01)
+        time.sleep(0.05)
 
     time.sleep(10)
     done = True
