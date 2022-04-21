@@ -132,9 +132,10 @@ def checkLocation(img, row, column, blocks):
 
 def shadeCell(value):
     if (value < 0):
-        value = (1 - abs(value)) * 250
-        if (value > 255):
-            value = 255
+        if (value < -1):
+            value = 0
+        else: 
+            value = (1 - abs(value)) * 250
         return (255, value, value)
     else:
         if(value < 1):
@@ -295,7 +296,7 @@ while not done:
         pygame.display.flip()
 
         # speed of agent movement
-        time.sleep(0.05)
+        time.sleep(0.03)
 
     time.sleep(10)
     done = True
