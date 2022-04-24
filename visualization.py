@@ -9,12 +9,12 @@ from agent import agent
 from policies import *
 
 ##Init World##
-random.seed(10)
+random.seed(1838700)
 
 # QLearn or SARSA
 algo = "QLearn"
 #PR, PE, PG
-policies = "PE"
+policies = ['PR', 'PE', 'PG']
 
 pickups = [(4, 2), (1, 3)]
 dropoffs = [(0, 0), (4, 0), (2, 2), (4, 4)]
@@ -169,7 +169,11 @@ while not done:
     for i in range(8000):
         ##Female Agent##
         moves = femaleAgent.aplop()
-        chosenMove = chooseMove(moves, femaleAgent.getQVals(), policies)
+        if(i < 500):
+            pol = policies[0]
+        else:
+            pol = policies[1]
+        chosenMove = chooseMove(moves, femaleAgent.getQVals(), pol)
         qtable = femaleAgent.move(chosenMove)
         value = qtable[1]
         cell_shade = shadeCell(value)
@@ -216,7 +220,7 @@ while not done:
 
         ##Male Agent##
         moves = maleAgent.aplop()
-        chosenMove = chooseMove(moves, maleAgent.getQVals(), policies)
+        chosenMove = chooseMove(moves, maleAgent.getQVals(), pol)
         qtable = maleAgent.move(chosenMove)
         value = qtable[1]
         cell_shade = shadeCell(value)
@@ -291,12 +295,15 @@ while not done:
                     checkLocation(cell_img, row, column, blocks)
                     if valueGrid[row][column] == 1:
                         color = red
-            time.sleep(5)
+            if (i > 7300):
+                print("Terminal state found at i = ", i)
+                time.sleep(10)
         clock.tick(50)
         pygame.display.flip()
 
         # speed of agent movement
-        time.sleep(0.03)
+        # if (i > 6500):
+        #     time.sleep(0.3)
 
     print("Terminal states reached: ", terminalStates)
     time.sleep(10)
