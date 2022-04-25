@@ -10,27 +10,23 @@ init_blocks = 10
 learningRate = 0.3
 discountRate = 0.5
 testWorld = world(pickups, dropoffs, init_blocks)
-
-femaleAgent = agent(2, 0, 0, Qtable(
-    learningRate, discountRate), testWorld, "QLearn")
-maleAgent = agent(2, 4, 0, Qtable(
-    learningRate, discountRate), testWorld, "QLearn")
+testQTable = Qtable(learningRate, discountRate)
+femaleAgent = agent(2, 0, 0, testQTable, testWorld, "QLearn")
+maleAgent = agent(2, 4, 0, testQTable, testWorld, "QLearn")
 
 femaleAgent.pairAgent(maleAgent)
 
 terminalStates = 0
 
-for i in range(8000):
-    moves = femaleAgent.aplop()
-    chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
-    qtable = femaleAgent.move(chosenMove)
-    moves = maleAgent.aplop()
-    chosenMove = chooseMove(moves, maleAgent.getQVals(), "PE")
-    qtable = maleAgent.move(chosenMove)
-    if(testWorld.isTerminal()):
-        terminalStates += 1
-        testWorld.reset(init_blocks)
-        femaleAgent.reset(2, 0)
-        maleAgent.reset(2, 4)
+#called before moving
+i, j, x, i2, j2, s, t, u, v = femaleAgent.getState()
 
-print("Terminal States Reached: ", terminalStates)
+moves = femaleAgent.aplop()
+chosenMove = chooseMove(moves, femaleAgent.getQVals(), "PE")
+femaleQTable = femaleAgent.move(chosenMove)
+moves = maleAgent.aplop()
+chosenMove = chooseMove(moves, maleAgent.getQVals(), "PE")
+maleQTable = maleAgent.move(chosenMove)
+# compare states after moving
+print(femaleAgent.qTable[i][j][x][i2][j2][s][t][u][v].actions)
+print(maleAgent.qTable[i][j][x][i2][j2][s][t][u][v].actions)
