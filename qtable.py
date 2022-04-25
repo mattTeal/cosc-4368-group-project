@@ -36,10 +36,10 @@ class Qtable:
             action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount, aplop)
         return [[i, j, x], qValue, action]
 
-    def SARSA(self, oldState, agent, action):
+    def SARSA(self, oldState, agent, action, newAction):
         i, j, x, k, l, s, t, u, v = oldState
         i1, j1, x1 = agent.agentState
         s1, t1, u1, v1 = agent.worldState
         qValue = self.stateSpace[i][j][x][k][l][s][t][u][v].SARSA(
-            action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount)
+            action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount, newAction)
         return [[i, j, x], qValue, action]

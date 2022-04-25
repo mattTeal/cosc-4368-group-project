@@ -8,13 +8,11 @@ from qtable import Qtable
 from agent import agent
 from policies import *
 
-##Init World##
-random.seed(10)
 
 # QLearn or SARSA
-algo = "QLearn"
+algo = "SARSA"
 #PR, PE, PG
-policies = "PE"
+policies = "PR"
 
 pickups = [(4, 2), (1, 3)]
 dropoffs = [(0, 0), (4, 0), (2, 2), (4, 4)]
@@ -35,10 +33,16 @@ maleAgent = agent(2, 4, 0, Qtable(
 
 femaleAgent.pairAgent(maleAgent)
 
+femaleQT = Qtable(0.3, 0.5)
+SfemaleAgent = agent(2, 0, 0, femaleQT, testWorld, algo)
+maleQT = Qtable(0.3, 0.5)
+SmaleAgent = agent(2, 4, 0, maleQT, testWorld, algo)
+SfemaleAgent.pairAgent(SmaleAgent)
+
 terminalStates = 0
 
 ##Init Game##
-pygame.init()  
+pygame.init()
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
@@ -72,6 +76,7 @@ dropoff_locations = [[0, 0], [0, 4], [2, 2], [4, 4]]
 done = False
 clock = pygame.time.Clock()
 
+
 def drawPickup(img, blocks):
     D_img = pygame.font.SysFont(cell_font,
                                 25).render(
@@ -87,6 +92,7 @@ def drawPickup(img, blocks):
         text_rect.x += 10 + i * 8
         text_rect.y += 35
         scr.blit(P_img, text_rect)
+
 
 def drawDropoff(img, blocks):
 
@@ -105,6 +111,7 @@ def drawDropoff(img, blocks):
         item_rect.y += 35
         scr.blit(item, item_rect)
 
+
 def drawCellValue(img, value):
     value_img = pygame.font.SysFont(cell_font,
                                     40).render(
@@ -112,6 +119,7 @@ def drawCellValue(img, value):
     )
     text_rect = value_img.get_rect(center=img.center)
     scr.blit(value_img, text_rect)
+
 
 def drawLastMove(img, move):
     last_move_img = pygame.font.SysFont(cell_font,
@@ -122,6 +130,7 @@ def drawLastMove(img, move):
     text_rect.y += 30
     scr.blit(last_move_img, text_rect)
 
+
 def checkLocation(img, row, column, blocks):
     for loc in pickup_locations:
         if (row == loc[0] and column == loc[1]):
@@ -130,11 +139,12 @@ def checkLocation(img, row, column, blocks):
         if (row == loc[0] and column == loc[1]):
             drawDropoff(img, blocks)
 
+
 def shadeCell(value):
     if (value < 0):
         if (value < -1):
             value = 0
-        else: 
+        else:
             value = (1 - abs(value)) * 250
         return (255, value, value)
     else:
@@ -143,6 +153,7 @@ def shadeCell(value):
         else:
             value = 0
         return (value, 255, value)
+
 
 for row in range(5):
     for column in range(5):
@@ -164,13 +175,25 @@ clock.tick(50)
 pygame.display.flip()
 terminalStates = 0
 count = 0
+
+fmoves = SfemaleAgent.aplop()
+fchosenMove = chooseMove(fmoves, SfemaleAgent.getQVals(), policies)
+
+mmoves = SmaleAgent.aplop()
+mchosenMove = chooseMove(mmoves, SmaleAgent.getQVals(), policies)
+speed = 0.0001
 while not done:
     time.sleep(.5)
-    for i in range(8000):
+    for i in range(154):
+        if i == 500:
+            policies = "PE"
         ##Female Agent##
-        moves = femaleAgent.aplop()
-        chosenMove = chooseMove(moves, femaleAgent.getQVals(), policies)
-        qtable = femaleAgent.move(chosenMove)
+        oldstate = SfemaleAgent.getState()
+        SfemaleAgent.move(fchosenMove)
+        fmoves = SfemaleAgent.aplop()
+        fchosenMove2 = chooseMove(fmoves, SfemaleAgent.getQVals(), policies)
+        qtable = SfemaleAgent.sarsa(oldstate, fchosenMove, fchosenMove2)
+
         value = qtable[1]
         cell_shade = shadeCell(value)
         move = qtable[2]
@@ -180,13 +203,12 @@ while not done:
                                      (MARGIN + HEIGHT) * fAgent[0] + MARGIN,
                                      WIDTH,
                                      HEIGHT])
-        print(chosenMove)
-        if(chosenMove == 'P'):
+        if(fchosenMove == 'P'):
             items[fAgent[0]][fAgent[1]] -= 1
             blocks = items[fAgent[0]][fAgent[1]]
             checkLocation(
                 cell_img, fAgent[0], fAgent[1], blocks)
-        elif(chosenMove == 'D'):
+        elif(fchosenMove == 'D'):
             items[fAgent[0]][fAgent[1]] += 1
             blocks = items[fAgent[0]][fAgent[1]]
             checkLocation(
@@ -197,7 +219,7 @@ while not done:
                 cell_img, fAgent[0], fAgent[1], blocks)
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
-        fMoves = femaleAgent.getPos()
+        fMoves = SfemaleAgent.getPos()
         fAgent[0] = fMoves[1]
         fAgent[1] = fMoves[0]
 
@@ -214,10 +236,14 @@ while not done:
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
 
+        fchosenMove = fchosenMove2
         ##Male Agent##
-        moves = maleAgent.aplop()
-        chosenMove = chooseMove(moves, maleAgent.getQVals(), policies)
-        qtable = maleAgent.move(chosenMove)
+        oldstate = SmaleAgent.getState()
+        SmaleAgent.move(mchosenMove)
+        mmoves = SmaleAgent.aplop()
+        qval = SmaleAgent.getQVals()
+        mchosenMove2 = chooseMove(mmoves, SmaleAgent.getQVals(), policies)
+        qtable = SmaleAgent.sarsa(oldstate, mchosenMove, mchosenMove2)
         value = qtable[1]
         cell_shade = shadeCell(value)
         move = qtable[2]
@@ -227,12 +253,12 @@ while not done:
                                      (MARGIN + HEIGHT) * mAgent[0] + MARGIN,
                                      WIDTH,
                                      HEIGHT])
-        if(chosenMove == 'P'):
+        if(mchosenMove == 'P'):
             items[mAgent[0]][mAgent[1]] -= 1
             blocks = items[mAgent[0]][mAgent[1]]
             checkLocation(
                 cell_img, mAgent[0], mAgent[1], blocks)
-        elif(chosenMove == 'D'):
+        elif(mchosenMove == 'D'):
             items[mAgent[0]][mAgent[1]] += 1
             blocks = items[mAgent[0]][mAgent[1]]
             checkLocation(
@@ -244,7 +270,7 @@ while not done:
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
 
-        mMoves = maleAgent.getPos()
+        mMoves = SmaleAgent.getPos()
         mAgent[0] = mMoves[1]
         mAgent[1] = mMoves[0]
 
@@ -260,14 +286,21 @@ while not done:
             cell_img, mAgent[0], mAgent[1], blocks)
         drawCellValue(cell_img, value)
         drawLastMove(cell_img, move)
-
+        mchosenMove = mchosenMove2
+        print(fMoves, end='')
+        print(mMoves)
+        count += 1
+        # if items[3][1] == 0 and items[2][4] == 0:
+        #     speed = 0.5
         #Reset for terminal state##
         if(testWorld.isTerminal()):
+            print(count)
+            count = 0
             pause = 1
             terminalStates += 1
             testWorld.reset(init_blocks)
-            femaleAgent.reset(2, 0)
-            maleAgent.reset(2, 4)
+            SfemaleAgent.reset(2, 0)
+            SmaleAgent.reset(2, 4)
             mAgent = [4, 2]
             fAgent = [0, 2]
             items = [[0, 0, 0, 0, 0],
@@ -275,6 +308,10 @@ while not done:
                      [0, 0, 0, 0, 10],
                      [0, 10, 0, 0, 0],
                      [0, 0, 0, 0, 0]]
+            fmoves = SfemaleAgent.aplop()
+            fchosenMove = chooseMove(fmoves, SfemaleAgent.getQVals(), policies)
+            mmoves = SmaleAgent.aplop()
+            mchosenMove = chooseMove(mmoves, SmaleAgent.getQVals(), policies)
 
             for row in range(5):
                 for column in range(5):
@@ -296,10 +333,10 @@ while not done:
         pygame.display.flip()
 
         # speed of agent movement
-        time.sleep(0.03)
+        time.sleep(speed)
 
     print("Terminal states reached: ", terminalStates)
     time.sleep(10)
     done = True
-
+print(items)
 pygame.quit()

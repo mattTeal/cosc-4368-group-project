@@ -12,7 +12,7 @@ class agent:
 
     def getQVals(self):
         return self.qTable.getQVal(self)
-    
+
     def getState(self):
         i, j, x = self.agentState
         s, t, u, v = self.worldState
@@ -20,7 +20,8 @@ class agent:
         return [i, j, x, i2, j2, s, t, u, v]
 
     def pairAgent(self, agent):
-        if self.pairedAgent: return
+        if self.pairedAgent:
+            return
         self.pairedAgent = agent
         agent.pairAgent(self)
 
@@ -34,10 +35,13 @@ class agent:
         self.worldState = newWorldState
         if self.lrnStrat == "QLearn":
             return self.qTable.QUpdate(oldState, self, action)
-        if self.lrnStrat == "SARSA":
-            return self.qTable.SARSA(oldState, self, action)
+        # if self.lrnStrat == "SARSA":
+        #     return self.qTable.SARSA(oldState, self, action, newAction)
         return -1
-    
+
+    def sarsa(self, oldstate, action, newAction):
+        return self.qTable.SARSA(oldstate, self, action, newAction)
+
     def reset(self, i, j):
         self.agentState = [i, j, 0]
         self.worldState = self.world.getWorldState(0)
