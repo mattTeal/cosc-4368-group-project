@@ -1,5 +1,5 @@
 import random
-random.seed(123)
+random.seed(10)
 
 
 def chooseMove(moves, qVals, policy):
