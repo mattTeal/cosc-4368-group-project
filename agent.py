@@ -6,6 +6,7 @@ class agent:
         self.worldState = world.getWorldState(x)
         self.pairedAgent = None
         self.lrnStrat = learningStrat
+        self.manhattan = 0
 
     def getPos(self):
         return self.agentState
@@ -42,6 +43,7 @@ class agent:
     def move(self, action):
         newAgentState, newWorldState = self.world.apply(self, action)
         oldState = self.getState()
+        self.manhattan += self.manDistance()
         self.agentState = newAgentState
         self.worldState = newWorldState
         if self.lrnStrat == "QLearn":
@@ -50,6 +52,11 @@ class agent:
             return self.qTable.SARSA(oldState, self, action)
         return -1
     
+    def manDistance(self):
+        i, j, x = self.getPos()
+        i2, j2, x2 = self.pairedAgent.getPos()
+        return (abs(i - i2) + abs(j - j2))
+
     def reset(self, i, j):
         self.agentState = [i, j, 0]
         self.worldState = self.world.getWorldState(0)
