@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 init_blocks = 10
-
+init_seed = 3325215321
 ##Init Game##
 pygame.init()  
 black = (0, 0, 0)
@@ -30,6 +30,7 @@ window_size = [1060, 1060]
 scr = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Cell Values")
 cell_font = pygame.font.get_default_font()
+FPS = 360
 
 clock = pygame.time.Clock()
 
@@ -171,7 +172,7 @@ def initialDraw(world):
             color = white
             cell_img = drawBlock(row, column, color, 0)
     drawPD(world.pickups, world.dropoffs, init_blocks)
-    clock.tick(80)
+    clock.tick(FPS)
     pygame.display.flip()
 
 def PlayerMove(agent, policy):
@@ -206,7 +207,7 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
                 cell_img = drawCenter(fPos[0], fPos[1], white)
                 drawDropoff(cell_img, world[fPos[0]][fPos[1]])
 
-        clock.tick(80)
+        clock.tick(FPS)
         pygame.display.flip()
         ##Male Agent##
         mPos, new_mPos, chosenMove, value = PlayerMove(maleAgent, currentPolicy)
@@ -222,7 +223,7 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
             if(tuple(mPos[0:2]) in world.dropoffs):
                 cell_img = drawCenter(mPos[0], mPos[1], white)
                 drawDropoff(cell_img, world[mPos[0]][mPos[1]])
-        clock.tick(80)
+        clock.tick(FPS)
         pygame.display.flip()
         #Reset for terminal state##
         if(world.isTerminal()):
@@ -236,12 +237,11 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
             if(terminalStates == terminalStops):
                 break
             initialDraw(world)
-            time.sleep(2)
         if (totalMoves == moves and moves != 0):
             break
         totalMoves += 1
         currentMoves += 1
-        clock.tick(80)
+        clock.tick(FPS)
         pygame.display.flip()
 
     movesPerTerminal.append(currentMoves)
@@ -254,7 +254,6 @@ def PlayGame(femaleAgent, maleAgent):
     movesPerTerminal = []
     totalMoves = 0
     while not done:
-        time.sleep(.5)
         mpt, currentMoves = Run("PR", femaleAgent, maleAgent, moves=500)
         movesPerTerminal.extend(mpt)
         totalMoves += currentMoves
@@ -279,7 +278,7 @@ def finalQtable(qtable, world):
         drawBlock(int(index / 5), index % 5, shadeCell(row["E"]/ 4), row["E"], "E")
         drawBlock(int(index / 5), index % 5, shadeCell(row["S"]/ 4), row["S"], "S")
         drawBlock(int(index / 5), index % 5, shadeCell(row["W"]/ 4), row["W"], "W")
-    clock.tick(80)
+    clock.tick(FPS)
     pygame.display.flip()
 
 def initVariables(combined, learning, discount, algo):
@@ -307,52 +306,52 @@ def plot(run1, run2):
 
 print("Seperate Tables")
 algo="SARSA"
-random.seed(1221)
+random.seed(init_seed)
 femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
 sepMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 
-random.seed(2442)
+random.seed(init_seed + 17438291)
 femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
 sepMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Female Final Qtable Run 2 (sep=True, x = 0):")
 finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(10)
+time.sleep(20)
 print("Female Final Qtable Run 2 (sep=True, x = 1):")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(10)
+time.sleep(0)
 print("Male Final Qtable Run 2 (sep=True, x = 0):")
 finalQtable(maleAgent.qTable.getQtable(0), World)
-time.sleep(10)
+time.sleep(20)
 print("Male Final Qtable Run 2 (sep=True, x = 1):")
 finalQtable(maleAgent.qTable.getQtable(1), World)
-time.sleep(10)
+time.sleep(0)
 
 print("Combined Tables")
 # COMBINED QTABLES
 algo="QLearn"
-random.seed(1221)
+random.seed(init_seed)
 femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Combined Final Qtable Run 1 (x=0): ")
 finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(10)
+time.sleep(20)
 print("Combined Final Qtable Run 1 (x=1): ")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(10)
+time.sleep(20)
 
-random.seed(2442)
+random.seed(init_seed + 17438291)
 femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Combined Final Qtable Run 2 (x=0): ")
 finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(10)
+time.sleep(20)
 print("Combined Final Qtable Run 2 (x=1): ")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(10)
+time.sleep(20)
 
 plot(sepMPTRun1, sepMPTRun2)
 plot(comMPTRun1, comMPTRun2)
