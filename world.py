@@ -125,3 +125,4 @@ class world:
         self.world[self.pickups[0][0]][self.pickups[0][1]] = self.world[new_pickups[0][0]][new_pickups[0][1]]
         self.world[self.pickups[1][0]][self.pickups[1][1]] = self.world[new_pickups[1][0]][new_pickups[1][1]]
         self.pickups = new_pickups
+        self.reset(10)
