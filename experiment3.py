@@ -337,86 +337,57 @@ def plot(run1, run2):
     plt.show()
 
 
-lr = 0.30
-sleep = 0
-print("Seperate Tables")
-algo = "SARSA"
-random.seed(init_seed)
-femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
-sepMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:", manhattan)
-random.seed(init_seed + 17438291)
-femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
-sepMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:", manhattan)
-print("Female Final Qtable Run 1 (sep=True, x = 0):")
-finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(sleep)
-print("Female Final Qtable Run 1 (sep=True, x = 1):")
-finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(0)
-print("Male Final Qtable Run 2 (sep=True, x = 0):")
-finalQtable(maleAgent.qTable.getQtable(0), World)
-time.sleep(sleep)
-print("Male Final Qtable Run 2 (sep=True, x = 1):")
-finalQtable(maleAgent.qTable.getQtable(1), World)
-time.sleep(0)
+lr = [0.15, 0.45]
+sleep = 5
+for i in lr:
+    print("Seperate Tables")
+    algo = "SARSA"
+    random.seed(init_seed)
+    femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
+    sepMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
+    print("Average Manhattan Distance:", manhattan)
+    random.seed(init_seed + 17438291)
+    femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
+    sepMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
+    print("Average Manhattan Distance:", manhattan)
+    print("Female Final Qtable Run 1 (sep=True, x = 0):")
+    finalQtable(femaleAgent.qTable.getQtable(0), World)
+    time.sleep(sleep)
+    print("Female Final Qtable Run 1 (sep=True, x = 1):")
+    finalQtable(femaleAgent.qTable.getQtable(1), World)
+    time.sleep(0)
+    print("Male Final Qtable Run 2 (sep=True, x = 0):")
+    finalQtable(maleAgent.qTable.getQtable(0), World)
+    time.sleep(sleep)
+    print("Male Final Qtable Run 2 (sep=True, x = 1):")
+    finalQtable(maleAgent.qTable.getQtable(1), World)
+    time.sleep(0)
 
-print("Combined Tables")
-# COMBINED QTABLES
-random.seed(init_seed)
-femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
-comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:", manhattan)
-print("Combined Final Qtable Run 1 (x=0): ")
-finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(sleep)
-print("Combined Final Qtable Run 1 (x=1): ")
-finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(sleep)
+    print("Combined Tables")
+    # COMBINED QTABLES
+    random.seed(init_seed)
+    femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
+    comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
+    print("Average Manhattan Distance:", manhattan)
+    print("Combined Final Qtable Run 1 (x=0): ")
+    finalQtable(femaleAgent.qTable.getQtable(0), World)
+    time.sleep(sleep)
+    print("Combined Final Qtable Run 1 (x=1): ")
+    finalQtable(femaleAgent.qTable.getQtable(1), World)
+    time.sleep(sleep)
 
-random.seed(init_seed + 17438291)
-femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
-comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:", manhattan)
-print("Combined Final Qtable Run 2 (x=0): ")
-finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(sleep)
-print("Combined Final Qtable Run 2 (x=1): ")
-finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(sleep)
+    random.seed(init_seed + 17438291)
+    femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
+    comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
+    print("Average Manhattan Distance:", manhattan)
+    print("Combined Final Qtable Run 2 (x=0): ")
+    finalQtable(femaleAgent.qTable.getQtable(0), World)
+    time.sleep(sleep)
+    print("Combined Final Qtable Run 2 (x=1): ")
+    finalQtable(femaleAgent.qTable.getQtable(1), World)
+    time.sleep(sleep)
 
-sum = 0
-min = sepMPTRun1[0]
-for i in sepMPTRun1:
-    sum += i
-    if min > i:
-        min = i
-average = sum / len(sepMPTRun1)
-
-print("Terminal States: ", end='')
-print(len(sepMPTRun1))
-print("Average Num Moves: ", end='')
-print(average)
-print("Min: ", end='')
-print(min)
-
-sum = 0
-min = sepMPTRun2[0]
-for i in sepMPTRun2:
-    sum += i
-    if min > i:
-        min = i
-average = sum / len(sepMPTRun2)
-
-print("Terminal States: ", end='')
-print(len(sepMPTRun2))
-print("Average Num Moves: ", end='')
-print(average)
-print("Min: ", end='')
-print(min)
-
-plot(sepMPTRun1, sepMPTRun2)
-plot(comMPTRun1, comMPTRun2)
+    plot(sepMPTRun1, sepMPTRun2)
+    plot(comMPTRun1, comMPTRun2)
 
 pygame.quit()
