@@ -30,8 +30,8 @@ class state:
             self.rewards[action] + discount * new_state.maxApplicable(aplop))
         return self.actions[action]
 
-    def SARSA(self, action, new_state, learning, discount, newAction):
+    def SARSA(self, action, new_state, learning, discount, new_move):
         self.actions[action] = self.actions[action] + learning * \
             (self.rewards[action] + discount *
-             new_state.actions[newAction] - self.actions[action])
+             new_state.actions[new_move] - self.actions[action])
         return self.actions[action]

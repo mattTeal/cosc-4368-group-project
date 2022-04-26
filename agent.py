@@ -41,7 +41,7 @@ class agent:
     def aplop(self):
         return self.world.aplop(self)
 
-    def move(self, action):
+    def move(self, action, policy):
         newAgentState, newWorldState = self.world.apply(self, action)
         oldState = self.getState()
         self.manhattan += self.manDistance()
@@ -49,8 +49,8 @@ class agent:
         self.worldState = newWorldState
         if self.lrnStrat == "QLearn":
             return self.qTable.QUpdate(oldState, self, action)
-        # if self.lrnStrat == "SARSA":
-        #     return self.qTable.SARSA(oldState, self, action, newAction)
+        if self.lrnStrat == "SARSA":
+            return self.qTable.SARSA(oldState, self, action, policy)
         return -1
 
     def sarsa(self, oldstate, action, newAction):
@@ -64,3 +64,26 @@ class agent:
     def reset(self, i, j):
         self.agentState = [i, j, 0]
         self.worldState = self.world.getWorldState(0)
+
+    def phantomMove(self, action):
+        newAgentState, newWorldState = self.world.apply(self, action)
+        oldAgentState = self.agentState
+        oldWorldState = self.worldState
+        self.agentState = newAgentState
+        self.worldState = newWorldState
+        assumedAplop = self.pairedAgent.aplop()
+        if (action == 'N'):
+            self.world.apply(self, "S")
+        elif action == 'S':
+            self.world.apply(self, "N")
+        elif action == 'E':
+            self.world.apply(self, "W")
+        elif action == 'W':
+            self.world.apply(self, "E")
+        elif action == 'P':
+            self.world.apply(self, "D")
+        elif action == 'D':
+            self.world.apply(self, "P")
+        self.agentState = oldAgentState
+        self.worldState = oldWorldState
+        return assumedAplop
