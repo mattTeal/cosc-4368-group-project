@@ -17,7 +17,19 @@ class agent:
         i, j, x = self.agentState
         s, t, u, v = self.worldState
         i2, j2, x2 = self.pairedAgent.agentState
-        return [i, j, x, i2, j2, s, t, u, v]
+        k = i - i2
+        l = j - j2
+        if ((k,l) == (1, 0)):
+            m = 1   
+        elif ((k,l) == (0, -1)):
+            m = 2
+        elif ((k,l) == (-1, 0)):
+            m = 3
+        elif ((k,l) == (0, 1)):
+            m = 4
+        else:
+            m = 0
+        return [i, j, x, m, s, t, u, v]
 
     def pairAgent(self, agent):
         if self.pairedAgent:

@@ -51,7 +51,8 @@ class world:
 
     # Reworked aplop to be simpler and work without needing to specify agent
     def aplop(self, agent):
-        i, j, x, i2, j2, s, t, u, v = agent.getState()
+        i, j, x, m, s, t, u, v = agent.getState()
+        i2, j2, x2 = agent.pairedAgent.getPos()
         validMoves = []
         validDP = [s, t, u, v]
         # Agent actions
@@ -119,3 +120,8 @@ class world:
             self[i[0]][i[1]] = init_blocks
         for i in self.dropoffs:
             self[i[0]][i[1]] = 0
+
+    def changePickups(self, new_pickups):
+        self.world[self.pickups[0][0]][self.pickups[0][1]] = self.world[new_pickups[0][0]][new_pickups[0][1]]
+        self.world[self.pickups[1][0]][self.pickups[1][1]] = self.world[new_pickups[1][0]][new_pickups[1][1]]
+        self.pickups = new_pickups
