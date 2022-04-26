@@ -1,4 +1,5 @@
 from state import state
+from policies import *
 import numpy as np
 import pandas as pd
 
@@ -66,10 +67,12 @@ class Qtable:
         qValue = oldSS.QUpdate(action, newSS, self.learning, self.discount, aplop)
         return [[i, j, x], qValue, action]
 
-    def SARSA(self, oldState, agent, action):
-        i, j, x, k, l, s, t, u, v = oldState
-        i1, j1, x1 = agent.agentState
-        s1, t1, u1, v1 = agent.worldState
-        qValue = self.stateSpace[i][j][x][k][l][s][t][u][v].SARSA(
-            action, self.stateSpace[i1][j1][x1][k][l][s1][t1][u1][v1], self.learning, self.discount)
+    def SARSA(self, oldState, agent, action, policy):
+        i, j, x, m, s, t, u, v = oldState
+        i1, j1, x1, m1, s1, t1, u1, v1 = agent.getState()
+        aplop = agent.pairedAgent.phantomMove(action)
+        chosenNewMove = chooseMove(aplop, self.getQVal(agent), policy)
+        oldSS = self.stateSpace[i][j][x][m][s][t][u][v]
+        newSS = self.stateSpace[i1][j1][x1][m1][s1][t1][u1][v1]
+        qValue = oldSS.SARSA(action, newSS, self.learning, self.discount, chosenNewMove)
         return [[i, j, x], qValue, action]

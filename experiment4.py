@@ -177,7 +177,7 @@ def initialDraw(world):
 def PlayerMove(agent, policy):
     moves = agent.aplop()
     chosenMove = chooseMove(moves, agent.getQVals(), policy)
-    oldPos, value, action = agent.move(chosenMove)
+    oldPos, value, action = agent.move(chosenMove, policy)
     newPos = agent.getPos()
 
     return [oldPos, newPos, chosenMove, value]
@@ -306,14 +306,14 @@ def plot(run1, run2):
     plt.show()
 
 print("Seperate Tables")
-algo="QLearn"
+algo="SARSA"
 random.seed(1221)
-femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, "QLearn")
+femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
 sepMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 
 random.seed(2442)
-femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, "QLearn")
+femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
 sepMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Female Final Qtable Run 2 (sep=True, x = 0):")
@@ -333,7 +333,7 @@ print("Combined Tables")
 # COMBINED QTABLES
 algo="QLearn"
 random.seed(1221)
-femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, "QLearn")
+femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Combined Final Qtable Run 1 (x=0): ")
@@ -344,7 +344,7 @@ finalQtable(femaleAgent.qTable.getQtable(1), World)
 time.sleep(10)
 
 random.seed(2442)
-femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, "QLearn")
+femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
 print("Average Manhattan Distance:",manhattan)
 print("Combined Final Qtable Run 2 (x=0): ")
