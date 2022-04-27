@@ -125,17 +125,23 @@ def drawLastMove(img, move, color):
 
 def shadeCell(value):
     if (value < 0):
+<<<<<<< HEAD
         if (value < -1):
             value = 0
         else:
             value = (1 - abs(value)) * 250
         return (255, value, value)
+=======
+        value = abs(value) * 125
+        if(value > 255): 
+            value = 255
+        return (255, 255 - value, 255 - value)
+>>>>>>> faa9799214cee04a8d2adb8a056e2aa99e804ceb
     else:
-        if(value < 1):
-            value = (abs(1 - value)) * 250
-        else:
-            value = 0
-        return (value, 255, value)
+        value = value * 125
+        if (value > 255):
+            value = 255
+        return (255 - value, 255, 255 - value)
 
 
 def drawPolygon(point1, point2, point3, point4, color):
@@ -343,6 +349,7 @@ def plot(run1, run2):
     plt.ylabel("Moves")
     plt.show()
 
+<<<<<<< HEAD
 
 print("Combined Tables")
 algo = "QLearn"
@@ -363,6 +370,27 @@ algo = "QLearn"
 # print("Run 2 terminal states: ", len(sepRun2))
 # print("Run 2 Average moves per terminal state: ", run2Avg)
 # print("Run 2 Average Manhattan Distance:", manhattan)
+=======
+print("Separate Tables")
+algo="QLearn"
+random.seed(init_seed)
+femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
+sepRun1, manhattan = PlayGame(femaleAgent, maleAgent)
+run1Avg = sum(sepRun1) / len(sepRun1)
+print("Run 1 mpt: ", sepRun1)
+print("Run 1 terminal states: ", len(sepRun1))
+print("Run 1 Average moves per terminal state: ", run1Avg)
+print("Run 1 Average Manhattan Distance:",manhattan)
+
+random.seed(init_seed + 17438291)
+femaleAgent, maleAgent, World = initVariables(False, 0.3, 0.5, algo)
+sepRun2, manhattan = PlayGame(femaleAgent, maleAgent)
+run2Avg = sum(sepRun2) / len(sepRun2)
+print("Run 2 mpt: ", sepRun2)
+print("Run 2 terminal states: ", len(sepRun2))
+print("Run 2 Average moves per terminal state: ", run2Avg)
+print("Run 2 Average Manhattan Distance:",manhattan)
+>>>>>>> faa9799214cee04a8d2adb8a056e2aa99e804ceb
 
 # finalQtable(femaleAgent.qTable.getQtable(0), World)
 # time.sleep(0)
@@ -378,6 +406,7 @@ algo = "QLearn"
 # print("Male Final Qtable Run 2 (sep=True, x = 1):")
 # finalQtable(maleAgent.qTable.getQtable(1), World)
 
+<<<<<<< HEAD
 # plot(sepRun1, sepRun2)
 
 print("Combined Tables")
@@ -407,4 +436,7 @@ time.sleep(0)
 
 plot(comMPTRun1, comMPTRun2)
 
+=======
+plot(sepRun1, sepRun2)
+>>>>>>> faa9799214cee04a8d2adb8a056e2aa99e804ceb
 pygame.quit()
