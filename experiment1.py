@@ -13,7 +13,7 @@ import seaborn as sns
 init_blocks = 10
 init_seed = 3325215321
 ##Init Game##
-pygame.init()  
+pygame.init()
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
@@ -30,9 +30,10 @@ window_size = [1060, 1060]
 scr = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Cell Values")
 cell_font = pygame.font.get_default_font()
-FPS = 360
+FPS = 1000
 
 clock = pygame.time.Clock()
+
 
 def drawPickup(img, blocks):
     D_img = pygame.font.SysFont(cell_font,
@@ -50,35 +51,41 @@ def drawPickup(img, blocks):
         text_rect.y += 35
         scr.blit(P_img, text_rect)
 
+
 def drawPD(pickups, dropoffs, init_blocks):
     for pickup in pickups:
         cell_image = pygame.draw.rect(scr,
-                                            white,
-                                            [(MARGIN + WIDTH) * pickup[0] + MARGIN + (WIDTH / 4),
-                                            (MARGIN + HEIGHT) * pickup[1] + MARGIN + (HEIGHT / 4),
-                                            WIDTH / 2,
-                                            HEIGHT / 2])
+                                      white,
+                                      [(MARGIN + WIDTH) * pickup[0] + MARGIN + (WIDTH / 4),
+                                       (MARGIN + HEIGHT) *
+                                       pickup[1] + MARGIN + (HEIGHT / 4),
+                                       WIDTH / 2,
+                                       HEIGHT / 2])
         pygame.draw.rect(scr,
-                                black,
-                                [(MARGIN + WIDTH) * pickup[0] + MARGIN + (WIDTH / 4),
-                                (MARGIN + HEIGHT) * pickup[1] + MARGIN + (HEIGHT / 4),
-                                WIDTH / 2,
-                                HEIGHT / 2], width=2)
+                         black,
+                         [(MARGIN + WIDTH) * pickup[0] + MARGIN + (WIDTH / 4),
+                          (MARGIN + HEIGHT) *
+                          pickup[1] + MARGIN + (HEIGHT / 4),
+                          WIDTH / 2,
+                          HEIGHT / 2], width=2)
         drawPickup(cell_image, init_blocks)
     for dropoff in dropoffs:
         cell_image = pygame.draw.rect(scr,
-                                            white,
-                                            [(MARGIN + WIDTH) * dropoff[0] + MARGIN + (WIDTH / 4),
-                                            (MARGIN + HEIGHT) * dropoff[1] + MARGIN + (HEIGHT / 4),
-                                            WIDTH / 2,
-                                            HEIGHT / 2])
+                                      white,
+                                      [(MARGIN + WIDTH) * dropoff[0] + MARGIN + (WIDTH / 4),
+                                       (MARGIN + HEIGHT) *
+                                       dropoff[1] + MARGIN + (HEIGHT / 4),
+                                       WIDTH / 2,
+                                       HEIGHT / 2])
         pygame.draw.rect(scr,
-                                black,
-                                [(MARGIN + WIDTH) * dropoff[0] + MARGIN + (WIDTH / 4),
-                                (MARGIN + HEIGHT) * dropoff[1] + MARGIN + (HEIGHT / 4),
-                                WIDTH / 2,
-                                HEIGHT / 2], width=2)
+                         black,
+                         [(MARGIN + WIDTH) * dropoff[0] + MARGIN + (WIDTH / 4),
+                          (MARGIN + HEIGHT) *
+                          dropoff[1] + MARGIN + (HEIGHT / 4),
+                          WIDTH / 2,
+                          HEIGHT / 2], width=2)
         drawDropoff(cell_image, 0)
+
 
 def drawDropoff(img, blocks):
     D_img = pygame.font.SysFont(cell_font,
@@ -96,6 +103,7 @@ def drawDropoff(img, blocks):
         item_rect.y += 35
         scr.blit(item, item_rect)
 
+
 def drawCellValue(img, value):
     value_img = pygame.font.SysFont(cell_font,
                                     20).render(
@@ -103,6 +111,7 @@ def drawCellValue(img, value):
     )
     text_rect = value_img.get_rect(center=img.center)
     scr.blit(value_img, text_rect)
+
 
 def drawLastMove(img, move, color):
     last_move_img = pygame.font.SysFont(cell_font,
@@ -113,11 +122,12 @@ def drawLastMove(img, move, color):
     text_rect.y += 30
     scr.blit(last_move_img, text_rect)
 
+
 def shadeCell(value):
     if (value < 0):
         if (value < -1):
             value = 0
-        else: 
+        else:
             value = (1 - abs(value)) * 250
         return (255, value, value)
     else:
@@ -127,13 +137,17 @@ def shadeCell(value):
             value = 0
         return (value, 255, value)
 
+
 def drawPolygon(point1, point2, point3, point4, color):
-    cell_img = pygame.draw.polygon(scr, color, [point1, point2, point3, point4])
+    cell_img = pygame.draw.polygon(
+        scr, color, [point1, point2, point3, point4])
     pygame.draw.polygon(scr, black, [point1, point2, point3, point4], width=2)
     return cell_img
 
+
 def drawBlock(column, row, color, value, action="none"):
-    topLeft = ((MARGIN + WIDTH) * column + MARGIN, (MARGIN + HEIGHT) * row + MARGIN)
+    topLeft = ((MARGIN + WIDTH) * column + MARGIN,
+               (MARGIN + HEIGHT) * row + MARGIN)
     topRight = (topLeft[0]+WIDTH, topLeft[1])
     bottomLeft = (topLeft[0], topLeft[1]+HEIGHT)
     bottomRight = (topLeft[0]+WIDTH, topLeft[1]+HEIGHT)
@@ -145,35 +159,43 @@ def drawBlock(column, row, color, value, action="none"):
     if(action == "N" or action == "none"):
         cell_img = drawPolygon(topLeft, topRight, centerTR, centerTL, color)
     if(action == "E" or action == "none"):
-        cell_img = drawPolygon(topRight, bottomRight, centerBR, centerTR, color)
+        cell_img = drawPolygon(topRight, bottomRight,
+                               centerBR, centerTR, color)
     if(action == "S" or action == "none"):
-        cell_img = drawPolygon(bottomRight, bottomLeft, centerBL, centerBR, color)
+        cell_img = drawPolygon(bottomRight, bottomLeft,
+                               centerBL, centerBR, color)
     if(action == "W" or action == "none"):
         cell_img = drawPolygon(bottomLeft, topLeft, centerTL, centerBL, color)
     if(action == "P" or action == "D"):
         cell_img = pygame.draw.rect(scr,
-                                            color,
-                                            [(MARGIN + WIDTH) * column + MARGIN + (WIDTH / 4),
-                                            (MARGIN + HEIGHT) * row + MARGIN + (HEIGHT / 4),
-                                            WIDTH / 2,
-                                            HEIGHT / 2])
+                                    color,
+                                    [(MARGIN + WIDTH) * column + MARGIN + (WIDTH / 4),
+                                     (MARGIN + HEIGHT) * row +
+                                     MARGIN + (HEIGHT / 4),
+                                     WIDTH / 2,
+                                     HEIGHT / 2])
     drawCellValue(cell_img, value)
     return cell_img
 
+
 def drawCenter(pos1, pos2, color):
     return pygame.draw.rect(scr, color, [(MARGIN + WIDTH) * pos1 + MARGIN + (WIDTH / 4),
-                                    (MARGIN + HEIGHT) * pos2 + MARGIN + (HEIGHT / 4),
-                                    WIDTH / 2,
-                                    HEIGHT / 2])
+                                         (MARGIN + HEIGHT) * pos2 +
+                                         MARGIN + (HEIGHT / 4),
+                                         WIDTH / 2,
+                                         HEIGHT / 2])
+
 
 def initialDraw(world):
     for row in range(5):
         for column in range(5):
             color = white
             cell_img = drawBlock(row, column, color, 0)
+            drawCenter(row, column, black)
     drawPD(world.pickups, world.dropoffs, init_blocks)
     clock.tick(FPS)
     pygame.display.flip()
+
 
 def PlayerMove(agent, policy):
     moves = agent.aplop()
@@ -183,8 +205,10 @@ def PlayerMove(agent, policy):
 
     return [oldPos, newPos, chosenMove, value]
 
-## Call to run with policy and max moves or terminal states
-## Returns moves ran if given terminal states stopping point or terminal states reached if given moves
+# Call to run with policy and max moves or terminal states
+# Returns moves ran if given terminal states stopping point or terminal states reached if given moves
+
+
 def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
     world = femaleAgent.world
     currentMoves = 0
@@ -192,8 +216,10 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
     terminalStates = 0
     movesPerTerminal = []
     while(True):
+        pygame.event.get()
         ##Female Agent##
-        fPos, new_fPos, chosenMove, value = PlayerMove(femaleAgent, currentPolicy)
+        fPos, new_fPos, chosenMove, value = PlayerMove(
+            femaleAgent, currentPolicy)
         cell_img = drawCenter(new_fPos[0], new_fPos[1], yellow)
         cell_img = drawCenter(fPos[0], fPos[1], black)
         drawLastMove(cell_img, chosenMove, yellow)
@@ -210,7 +236,8 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
         clock.tick(FPS)
         pygame.display.flip()
         ##Male Agent##
-        mPos, new_mPos, chosenMove, value = PlayerMove(maleAgent, currentPolicy)
+        mPos, new_mPos, chosenMove, value = PlayerMove(
+            maleAgent, currentPolicy)
         cell_img = drawCenter(new_mPos[0], new_mPos[1], blue)
         cell_img = drawCenter(mPos[0], mPos[1], black)
         drawLastMove(cell_img, chosenMove, yellow)
@@ -249,7 +276,9 @@ def Run(currentPolicy, femaleAgent, maleAgent, moves=0, terminalStops=0):
     movesPerTerminal.append(currentMoves)
     return movesPerTerminal, totalMoves
 
-## Where to put your experiment. Call run with necessary params
+# Where to put your experiment. Call run with necessary params
+
+
 def PlayGame(femaleAgent, maleAgent):
     done = False
     initialDraw(femaleAgent.world)
@@ -259,7 +288,7 @@ def PlayGame(femaleAgent, maleAgent):
         mpt, currentMoves = Run("PR", femaleAgent, maleAgent, moves=500)
         movesPerTerminal.extend(mpt)
         totalMoves += currentMoves
-        mpt, currentMoves = Run("PE", femaleAgent, maleAgent,moves=7500)
+        mpt, currentMoves = Run("PE", femaleAgent, maleAgent, moves=7500)
         mpt[0] += movesPerTerminal.pop()
         movesPerTerminal.extend(mpt[:-1])
         totalMoves += currentMoves
@@ -268,17 +297,23 @@ def PlayGame(femaleAgent, maleAgent):
         done = True
     return movesPerTerminal, (femaleAgent.manhattan / totalMoves)
 
+
 def finalQtable(qtable, world):
     initialDraw(world)
     drawCenter(2, 0, yellow)
     drawCenter(2, 4, blue)
     for index, row in qtable.iterrows():
-        drawBlock(int(index / 5), index % 5, shadeCell(row["N"]/ 4), row["N"], "N")
-        drawBlock(int(index / 5), index % 5, shadeCell(row["E"]/ 4), row["E"], "E")
-        drawBlock(int(index / 5), index % 5, shadeCell(row["S"]/ 4), row["S"], "S")
-        drawBlock(int(index / 5), index % 5, shadeCell(row["W"]/ 4), row["W"], "W")
+        drawBlock(int(index / 5), index %
+                  5, shadeCell(row["N"] / 4), row["N"], "N")
+        drawBlock(int(index / 5), index %
+                  5, shadeCell(row["E"] / 4), row["E"], "E")
+        drawBlock(int(index / 5), index %
+                  5, shadeCell(row["S"] / 4), row["S"], "S")
+        drawBlock(int(index / 5), index %
+                  5, shadeCell(row["W"] / 4), row["W"], "W")
     clock.tick(FPS)
     pygame.display.flip()
+
 
 def initVariables(combined, learning, discount, algo):
     pickups = [(4, 2), (1, 3)]
@@ -290,14 +325,17 @@ def initVariables(combined, learning, discount, algo):
         maleAgent = agent(2, 4, 0, combinedQTable, World, algo)
     else:
         femaleAgent = agent(2, 0, 0, Qtable(learning, discount), World, algo)
-        maleAgent = agent(2, 0, 0, Qtable(learning, discount), World, algo)
+        maleAgent = agent(2, 4, 0, Qtable(learning, discount), World, algo)
     femaleAgent.pairAgent(maleAgent)
     return femaleAgent, maleAgent, World
 
+
 def plot(run1, run2):
-    run1 = sns.regplot(y=run1, x=np.arange(0, len(run1), 1), color="g", label="First Run")
+    run1 = sns.regplot(y=run1, x=np.arange(0, len(run1), 1),
+                       color="g", label="First Run")
     ax2 = plt.twinx()
-    run2 = sns.regplot(y=run2, x=np.arange(0, len(run2), 1), ax=ax2, label="Second Run")
+    run2 = sns.regplot(y=run2, x=np.arange(
+        0, len(run2), 1), ax=ax2, label="Second Run")
     run1.set(ylim=(0, 800))
     run2.set(ylim=(0, 800))
     plt.title("Moves per Terminal State Vs. Time")
@@ -305,66 +343,67 @@ def plot(run1, run2):
     plt.ylabel("Moves")
     plt.show()
 
+
 print("Combined Tables")
-algo="QLearn"
-random.seed(init_seed)
-femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
-sepRun1, manhattan = PlayGame(femaleAgent, maleAgent)
-run1Avg = sum(sepRun1) / len(sepRun1)
-print("Run 1 mpt: ", sepRun1)
-print("Run 1 terminal states: ", len(sepRun1))
-print("Run 1 Average moves per terminal state: ", run1Avg)
-print("Run 1 Average Manhattan Distance:",manhattan)
+algo = "QLearn"
+# random.seed(init_seed)
+# femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
+# sepRun1, manhattan = PlayGame(femaleAgent, maleAgent)
+# run1Avg = sum(sepRun1) / len(sepRun1)
+# print("Run 1 mpt: ", sepRun1)
+# print("Run 1 terminal states: ", len(sepRun1))
+# print("Run 1 Average moves per terminal state: ", run1Avg)
+# print("Run 1 Average Manhattan Distance:", manhattan)
 
-random.seed(init_seed + 17438291)
-femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
-sepRun2, manhattan = PlayGame(femaleAgent, maleAgent)
-run2Avg = sum(sepRun2) / len(sepRun2)
-print("Run 2 mpt: ", sepRun2)
-print("Run 2 terminal states: ", len(sepRun2))
-print("Run 2 Average moves per terminal state: ", run2Avg)
-print("Run 2 Average Manhattan Distance:",manhattan)
+# random.seed(init_seed + 17438291)
+# femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
+# sepRun2, manhattan = PlayGame(femaleAgent, maleAgent)
+# run2Avg = sum(sepRun2) / len(sepRun2)
+# print("Run 2 mpt: ", sepRun2)
+# print("Run 2 terminal states: ", len(sepRun2))
+# print("Run 2 Average moves per terminal state: ", run2Avg)
+# print("Run 2 Average Manhattan Distance:", manhattan)
 
-finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(20)
-print("Female Final Qtable Run 1 (sep=True, x = 0):")
-finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(20)
-print("Female Final Qtable Run 2 (sep=True, x = 1):")
-finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(0)
-print("Male Final Qtable Run 1 (sep=True, x = 0):")
-finalQtable(maleAgent.qTable.getQtable(0), World)
-time.sleep(20)
-print("Male Final Qtable Run 2 (sep=True, x = 1):")
-finalQtable(maleAgent.qTable.getQtable(1), World)
+# finalQtable(femaleAgent.qTable.getQtable(0), World)
+# time.sleep(0)
+# print("Female Final Qtable Run 1 (sep=True, x = 0):")
+# finalQtable(femaleAgent.qTable.getQtable(0), World)
+# time.sleep(0)
+# print("Female Final Qtable Run 2 (sep=True, x = 1):")
+# finalQtable(femaleAgent.qTable.getQtable(1), World)
+# time.sleep(0)
+# print("Male Final Qtable Run 1 (sep=True, x = 0):")
+# finalQtable(maleAgent.qTable.getQtable(0), World)
+# time.sleep(2)
+# print("Male Final Qtable Run 2 (sep=True, x = 1):")
+# finalQtable(maleAgent.qTable.getQtable(1), World)
 
-plot(sepRun1, sepRun2)
+# plot(sepRun1, sepRun2)
 
 print("Combined Tables")
 # COMBINED QTABLES
-algo="QLearn"
+algo = "QLearn"
 random.seed(init_seed)
 femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:",manhattan)
+print("Average Manhattan Distance:", manhattan)
 print("Combined Final Qtable Run 1 (x=0): ")
 finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(20)
+time.sleep(0)
 print("Combined Final Qtable Run 1 (x=1): ")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(20)
+time.sleep(0)
 
 random.seed(init_seed + 17438291)
 femaleAgent, maleAgent, World = initVariables(True, 0.3, 0.5, algo)
 comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
-print("Average Manhattan Distance:",manhattan)
+print("Average Manhattan Distance:", manhattan)
 print("Combined Final Qtable Run 2 (x=0): ")
 finalQtable(femaleAgent.qTable.getQtable(0), World)
-time.sleep(20)
+time.sleep(0)
 print("Combined Final Qtable Run 2 (x=1): ")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
-time.sleep(20)
+time.sleep(0)
 
 plot(comMPTRun1, comMPTRun2)
 

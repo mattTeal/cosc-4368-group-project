@@ -191,6 +191,7 @@ def initialDraw(world):
         for column in range(5):
             color = white
             cell_img = drawBlock(row, column, color, 0)
+            drawCenter(row, column, black)
     drawPD(world.pickups, world.dropoffs, init_blocks)
     clock.tick(FPS)
     pygame.display.flip()
@@ -386,35 +387,6 @@ print("Combined Final Qtable Run 2 (x=1): ")
 finalQtable(femaleAgent.qTable.getQtable(1), World)
 time.sleep(sleep)
 
-sum = 0
-min = sepMPTRun1[0]
-for i in sepMPTRun1:
-    sum += i
-    if min > i:
-        min = i
-average = sum / len(sepMPTRun1)
-
-print("Terminal States: ", end='')
-print(len(sepMPTRun1))
-print("Average Num Moves: ", end='')
-print(average)
-print("Min: ", end='')
-print(min)
-
-sum = 0
-min = sepMPTRun2[0]
-for i in sepMPTRun2:
-    sum += i
-    if min > i:
-        min = i
-average = sum / len(sepMPTRun2)
-
-print("Terminal States: ", end='')
-print(len(sepMPTRun2))
-print("Average Num Moves: ", end='')
-print(average)
-print("Min: ", end='')
-print(min)
 
 plot(sepMPTRun1, sepMPTRun2)
 plot(comMPTRun1, comMPTRun2)

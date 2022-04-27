@@ -30,7 +30,7 @@ window_size = [1060, 1060]
 scr = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Cell Values")
 cell_font = pygame.font.get_default_font()
-FPS = 5
+FPS = 1000
 
 clock = pygame.time.Clock()
 

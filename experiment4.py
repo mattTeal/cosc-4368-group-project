@@ -191,6 +191,7 @@ def initialDraw(world):
         for column in range(5):
             color = white
             cell_img = drawBlock(row, column, color, 0)
+            drawCenter(row, column, black)
     drawPD(world.pickups, world.dropoffs, init_blocks)
     clock.tick(FPS)
     pygame.display.flip()
