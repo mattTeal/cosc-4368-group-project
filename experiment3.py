@@ -30,7 +30,7 @@ window_size = [1060, 1060]
 scr = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Cell Values")
 cell_font = pygame.font.get_default_font()
-FPS = 1000
+FPS = 5
 
 clock = pygame.time.Clock()
 
@@ -343,11 +343,11 @@ for i in lr:
     print("Seperate Tables")
     algo = "SARSA"
     random.seed(init_seed)
-    femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
+    femaleAgent, maleAgent, World = initVariables(False, i, 0.5, algo)
     sepMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
     print("Average Manhattan Distance:", manhattan)
     random.seed(init_seed + 17438291)
-    femaleAgent, maleAgent, World = initVariables(False, lr, 0.5, algo)
+    femaleAgent, maleAgent, World = initVariables(False, i, 0.5, algo)
     sepMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
     print("Average Manhattan Distance:", manhattan)
     print("Female Final Qtable Run 1 (sep=True, x = 0):")
@@ -366,7 +366,7 @@ for i in lr:
     print("Combined Tables")
     # COMBINED QTABLES
     random.seed(init_seed)
-    femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
+    femaleAgent, maleAgent, World = initVariables(True, i, 0.5, algo)
     comMPTRun1, manhattan = PlayGame(femaleAgent, maleAgent)
     print("Average Manhattan Distance:", manhattan)
     print("Combined Final Qtable Run 1 (x=0): ")
@@ -377,7 +377,7 @@ for i in lr:
     time.sleep(sleep)
 
     random.seed(init_seed + 17438291)
-    femaleAgent, maleAgent, World = initVariables(True, lr, 0.5, algo)
+    femaleAgent, maleAgent, World = initVariables(True, i, 0.5, algo)
     comMPTRun2, manhattan = PlayGame(femaleAgent, maleAgent)
     print("Average Manhattan Distance:", manhattan)
     print("Combined Final Qtable Run 2 (x=0): ")
