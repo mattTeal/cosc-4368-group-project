@@ -1,1 +1,17 @@
 # cosc-4368-group-project
+
+![COSC 4368 Group Project1024_1](https://user-images.githubusercontent.com/89936190/169662374-11501737-e663-4e1c-a904-03e3b24eda26.jpg)
+![COSC 4368 Group Project1024_2](https://user-images.githubusercontent.com/89936190/169662375-2ba0235a-13eb-4aa7-8445-b8df69bf7783.jpg)
+![COSC 4368 Group Project1024_3](https://user-images.githubusercontent.com/89936190/169662376-b9d7b65e-770a-42dc-bd2c-d30e808b449b.jpg)
+![COSC 4368 Group Project1024_4](https://user-images.githubusercontent.com/89936190/169662378-5072349d-870b-4f9f-acc9-9ceee619d571.jpg)
+![COSC 4368 Group Project1024_5](https://user-images.githubusercontent.com/89936190/169662364-06efe74f-b3b4-495c-944d-c8410f3a286d.jpg)
+![COSC 4368 Group Project1024_6](https://user-images.githubusercontent.com/89936190/169662365-ab5cdbff-1739-4926-a6bf-c50850902306.jpg)
+![COSC 4368 Group Project1024_7](https://user-images.githubusercontent.com/89936190/169662366-1ad5e971-073b-4dfb-9b7f-f3e52d192782.jpg)
+![COSC 4368 Group Project1024_8](https://user-images.githubusercontent.com/89936190/169662367-d065c0f3-63df-424e-b8c0-c79f1a275ec7.jpg)
+![COSC 4368 Group Project1024_9](https://user-images.githubusercontent.com/89936190/169662368-c57e59a4-6557-4202-9859-c55a9ed3b9a6.jpg)
+![COSC 4368 Group Project1024_10](https://user-images.githubusercontent.com/89936190/169662370-db8cd789-874c-4faa-8659-9dd1866d143d.jpg)
+![COSC 4368 Group Project1024_11](https://user-images.githubusercontent.com/89936190/169662371-839a09d0-8b42-4f3f-b783-d00ada6c0ab7.jpg)
+![COSC 4368 Group Project1024_12](https://user-images.githubusercontent.com/89936190/169662373-096b9403-af00-432b-9e37-42656de8d312.jpg)
+![COSC 4368 Group Project1024_13](https://user-images.githubusercontent.com/89936190/169662358-e2e23523-1a68-4fcc-938a-9a00c0683489.jpg)
+![COSC 4368 Group Project1024_14](https://user-images.githubusercontent.com/89936190/169662361-05fa698b-bc81-4779-a706-f61488cb1270.jpg)
+![COSC 4368 Group Project1024_15](https://user-images.githubusercontent.com/89936190/169662363-41d8a18d-f991-48f0-b212-7d250c1481b1.jpg)
